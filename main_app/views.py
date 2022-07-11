@@ -56,6 +56,19 @@ class MealCreate(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+class MealUpdate(LoginRequiredMixin, UpdateView):
+    model = Meal
+    fields = ['week', 'date', 'name']
+
+class MealDelete(LoginRequiredMixin, DeleteView):
+    model = Meal
+    success_url = '/meals/'
+    
+
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #     return super().form_valid(form)
+
 class ListList(LoginRequiredMixin, ListView):
     model = List
     template_name = 'lists/index.html'
