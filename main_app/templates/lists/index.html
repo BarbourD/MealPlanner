@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>list index</h1>
+
+{% for list in object_list %}
+<div class="card">
+    <a href="{% url 'lists_detail' list.id %}">
+        <div class="card-content">
+            <span class="card-title">{{list.quantity}}</span>
+            {{list.item}}
+        </div>
+    </a>
+</div>
+
+{% endfor %}{% endblock %}

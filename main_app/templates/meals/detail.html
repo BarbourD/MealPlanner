@@ -1,5 +1,27 @@
 {% extends 'base.html' %} {% block content %}
 
-<h1>Meals Details</h1>
+<h1>Recipe</h1>
 
+<div class="row">
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card_title">{{meal.week}}</span>
+                <p>Day: {{meal.date}}</p>
+                <p>Meal Name: {{meal.name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card_title">{{meal.week}}</span>
+                <p>Day: {{meal.date}}</p>
+                <p>Meal Name: {{meal.name}}</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

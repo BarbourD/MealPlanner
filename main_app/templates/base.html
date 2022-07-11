@@ -24,7 +24,10 @@
                 <ul class="right">
                     <li><a href="{% url 'about' %}">About</a></li>
                     {% if user.is_authenticated %}
+                    <li><a href="{% url 'meals_create' %}">Add a Meal</a> </li>
                     <li><a href="{% url 'index' %}">View All Meals</a></li>
+                    <li><a href="{% url 'lists_index' %}">View Shopping List</a></li>
+                    <li><a href="{% url 'lists_create' %}">Add Shopping List Item</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
