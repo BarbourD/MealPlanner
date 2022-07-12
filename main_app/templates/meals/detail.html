@@ -1,13 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 
 <h1>Recipe</h1>
-
-<div class="row">
-    <div class="col s3">
-        <div class="card">
+    <div class="row">
+        <div class="col s3">
             <div class="card-content">
-                <span class="card_title">{{meal.week}}</span>
-                <p>Day: {{meal.date}}</p>
+                <span class="card_title">Day: {{meal.day}}</span>
+                <p>Date: {{meal.date}}</p>
                 <p>Meal Name: {{meal.name}}</p>
             </div>
             <div class="card-action">
@@ -17,5 +15,64 @@
         </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col s6">
+        <h3>{{meal.name}}</h3>
+        {% if meal.lists.count %} {% for spell in meal.lists.all %}
+        <div class="card">
+            <div class="card-title">
+                <span>{{ meal.name }}</span>
+            </div>
+        </div>
+        <div class="card-action">
+            <form
+            action="{% url 'assoc_spell_delete' meal.id list.id %}"
+            method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn red">Delete</button>
+        </form>
+    </div>
+</div>
+{% endfor %} 
+{% else %}
+<div class="card">
+<form action="{% url 'add_recipe' meal.id %}" method="post">
+    {% csrf_token %}
+    {{ recipe_form.as_p }}
+    <input type="submit" class="btn" value="Add Recipe" />
+</form>
+<br />
+<div class="col s6">
+    <table class="striped">
+        <thead>
+            <tr>
+                <th>Ingredients</th>
+                <th>Directions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in meal.recipe_set.all %}
+            <tr>
+                <td>{{recipe.ingredients}}</td>
+                <td>{{recipe.directions}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<h5>No Lists</h5>
+        {% endif %}
+     </div>
+     <div class="col s6">
+        <h3> Grocery Lists </h3>
+        {% if lists.count %}
+        {% for list in lists.all %}
+        <div class="card">
+        </div>
+        {% endfor %}
+    {% else %}
+        <h5>{{meal.name}} already has a list</h5>
+        {% endif %}
+     </div>
+</div>
 {% endblock %}

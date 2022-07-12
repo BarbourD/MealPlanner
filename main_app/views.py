@@ -1,4 +1,4 @@
-from typing import List
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
@@ -10,7 +10,9 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .models import Meal, List
+from .forms import RecipeForm
+
+from .models import Meal, List 
 
 # Create your views here.
 
@@ -27,7 +29,15 @@ def meals_index(request):
 
 def meals_detail(request, meal_id):
     meal = Meal.objects.get(id=meal_id)
-    return render(request, 'meals/detail.html', {'meal' : meal})
+    return render(request, 'meals/detail.html', {'meal' : meal })
+
+def add_recipe(request, meal_id):
+    form = RecipeForm(request.POST)
+    if form.is_valid():
+        new_recipe = form.save(commit=False)
+        new_recipe.meal_id = meal_id
+        new_recipe.save()
+    return redirect('detail', meal_id=meal_id)
 
 def assoc_list(request, meal_id, list_id):
     Meal.objects.get(id=meal_id).lists.remove(list_id)
@@ -49,7 +59,7 @@ def signup(request):
 
 class MealCreate(LoginRequiredMixin, CreateView):
     model = Meal
-    fields = ['week', 'date', 'name']
+    fields = ['day', 'date', 'name']
     success_url = '/meals/'
 
     def form_valid(self, form):
@@ -58,7 +68,7 @@ class MealCreate(LoginRequiredMixin, CreateView):
 
 class MealUpdate(LoginRequiredMixin, UpdateView):
     model = Meal
-    fields = ['week', 'date', 'name']
+    fields = ['day', 'date', 'name']
 
 class MealDelete(LoginRequiredMixin, DeleteView):
     model = Meal
