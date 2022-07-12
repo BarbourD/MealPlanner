@@ -44,3 +44,9 @@ class Recipe(models.Model):
     def __str__(self):
         return f"Recipe Ingredients {self.ingredients} Recipe Directions {self.directions}"
     
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for meal_id: {self.meal_id} @{self.url}"

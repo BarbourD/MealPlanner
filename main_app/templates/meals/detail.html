@@ -1,8 +1,9 @@
 {% extends 'base.html' %} {% block content %}
 
 <h1>Recipe</h1>
-    <div class="row">
-        <div class="col s3">
+<div class="row">
+    <div class="col s3">
+        <div class="card">
             <div class="card-content">
                 <span class="card_title">Day: {{meal.day}}</span>
                 <p>Date: {{meal.date}}</p>
@@ -14,11 +15,55 @@
             </div>
         </div>
     </div>
+
+        <!-- =======================PHOTO ADD==================================== -->
+    {% for photo in meal.photo_set.all %}
+        <img class="responsive-img card-panel" src="{{photo.url}}" alt="{{meal.name}}">
+    (% empty %)
+        <div class="card-panel teal-text center-align">No Photos UpLoaded</div>
+    (% endfor %)
+    <form
+        action="{% url 'add_photo' meal.id %}"
+        enctype="multipart/form-data"
+        method="POST"
+        class="card-panel">
+        {% csrf_token %}
+        <input type="file" name="photo-file" />
+        <br /> <br />
+        <input type="submit" class="btn" value="Upload Photo" />
+    </form>
 </div>
+
+
+<!-- ==========================RECIPE ADD====================================== -->
+<div class="col s6">
+    <form action="{% url 'add_recipe' meal.id %}" method="POST">
+        {% csrf_token %} {{ recipe_form.as_p }}
+        <input type="submit" class="btn" value="Add Recipe" />
+    </form>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Ingredients</th>
+                    <th>Directions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in meal.recipe_set.all %}
+                <tr>
+                    <td>{{recipe.ingredients}}</td>
+                    <td>{{recipe.directions}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <!-- =================================LIST ADD==================================== -->
 <div class="row">
     <div class="col s6">
         <h3>{{meal.name}}</h3>
-        {% if meal.lists.count %} {% for spell in meal.lists.all %}
+        {% if meal.lists.count %} {% for list in meal.lists.all %}
         <div class="card">
             <div class="card-title">
                 <span>{{ meal.name }}</span>
@@ -26,40 +71,17 @@
         </div>
         <div class="card-action">
             <form
-            action="{% url 'assoc_spell_delete' meal.id list.id %}"
-            method="POST">
+                action="{% url 'assoc_list_delete' meal.id list.id %}"
+                method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn red">Delete</button>
-        </form>
+                <button type="submit" class="btn red">Delete</button>
+            </form>
+        </div>
     </div>
-</div>
-{% endfor %} 
-{% else %}
+    {% endfor %} 
+{ % else %}
 <div class="card">
-<form action="{% url 'add_recipe' meal.id %}" method="post">
-    {% csrf_token %}
-    {{ recipe_form.as_p }}
-    <input type="submit" class="btn" value="Add Recipe" />
-</form>
 <br />
-<div class="col s6">
-    <table class="striped">
-        <thead>
-            <tr>
-                <th>Ingredients</th>
-                <th>Directions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for recipe in meal.recipe_set.all %}
-            <tr>
-                <td>{{recipe.ingredients}}</td>
-                <td>{{recipe.directions}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
 <h5>No Lists</h5>
         {% endif %}
      </div>

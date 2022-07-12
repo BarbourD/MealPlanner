@@ -14,5 +14,6 @@ urlpatterns = [
     path('lists/', views.ListList.as_view(), name='lists_index'),
     path('lists/<int:pk>', views.ListDetail.as_view(), name='lists_detail'),
     path('lists/create', views.ListCreate.as_view(), name='lists_create'),
+    path('meals/<int:meal_id>/add_photo/', views.add_photo, name='add_photo'),
     path('accounts/signup/', views.signup, name='signup'),
 ]
