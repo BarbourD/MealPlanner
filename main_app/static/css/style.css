@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    background-image: linear-gradient(2 bottom, #ffd54f, #ffc107);
 }
 
 body {
@@ -18,7 +19,3 @@ footer {
     text-align: right;
 }
 
-.help {
-    display: flex;
-    flex-flow: row wrap;
-}

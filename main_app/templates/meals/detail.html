@@ -15,7 +15,6 @@
     </div>
 </div>
 
-
 <div class="col s6">
     <div class="card">
         <div class="card-content">
@@ -23,14 +22,10 @@
             {% for recipe in meal.recipe_set.all %}
             <p>{{recipe.ingredients}}</p>
             {% endfor %}
-       
-
-   
-                </form>
-            </div>
         </div>
     </div>
 </div>
+
 <div class="col s6">
     <div class="card">
         <div class="card-content">
@@ -41,7 +36,9 @@
         </div>
     </div>
 </div>
-  <br />      
+  
+<br /> 
+
 <div class="card-panel">
     <form action="{% url 'add_recipe' meal.id %}" method="POST">
         {% csrf_token %} {{ recipe_form.as_p }}
@@ -53,25 +50,20 @@
     <form action="{% url 'add_directions' meal.id %}" method="POST">
         {% csrf_token %} {{ directions_form.as_p }}
         <input type="submit" class="btn" value="Add Directions" />
-        </form>
+    </form>
 </div>
-    
 
+<form
+    action="{% url 'add_photo' meal.id %}"
+    enctype="multipart/form-data"
+    method="POST"
+    class="card-panel"> 
+    {% csrf_token %}
+    <input type="file" name="photo-file" />
+    <br /> <br />
+    <input type="submit" class="btn" value="Upload Photo" />
+</form>
 
-                <form
-                    action="{% url 'add_photo' meal.id %}"
-                    enctype="multipart/form-data"
-                    method="POST"
-                    class="card-panel"> 
-                {% csrf_token %}
-                <input type="file" name="photo-file" />
-                <br /> <br />
-                <input type="submit" class="btn" value="Upload Photo" />
-                </form>
-            </div>  
-        </div>
-    </div>
-</div>             
 
     <!-- =================================LIST ADD==================================== -->
     <!-- <div class="row">

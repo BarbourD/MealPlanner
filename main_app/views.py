@@ -8,7 +8,7 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import RecipeForm, DirectionsForm
-from .models import Meal, List, Photo, Recipe 
+from .models import Meal, List, Photo
 
 import uuid
 import boto3
@@ -18,17 +18,18 @@ BUCKET = 'meal-planner-db'
 
 # Create your views here.
 
-
 def home(request):
     return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
 
+@login_required
 def meals_index(request):
     meals = Meal.objects.filter(user=request.user)
     return render(request, 'meals/index.html', {'meals': meals })
 
+@login_required
 def meals_detail(request, meal_id):
     meal = Meal.objects.get(id=meal_id)
     recipe_form = RecipeForm()
@@ -36,6 +37,7 @@ def meals_detail(request, meal_id):
     lists_meal_doesnt_have = List.objects.exclude(id__in = meal.lists.all().values_list('id'))
     return render(request, 'meals/detail.html', {'meal' : meal, 'recipe_form' : recipe_form, 'directions_form' : directions_form, 'lists' : lists_meal_doesnt_have })
 
+@login_required
 def add_recipe(request, meal_id):
     form = RecipeForm(request.POST)
     if form.is_valid():
@@ -43,10 +45,8 @@ def add_recipe(request, meal_id):
         new_recipe.meal_id = meal_id
         new_recipe.save()
     return redirect('detail', meal_id=meal_id)
-def edit_recipe(request, meal_id):
-    form = RecipeForm(request.POST)
 
-
+@login_required
 def add_directions(request, meal_id):
     form = DirectionsForm(request.POST)
     if form.is_valid():
@@ -55,14 +55,17 @@ def add_directions(request, meal_id):
         new_directions.save()
     return redirect('detail', meal_id=meal_id)
 
+@login_required
 def assoc_list(request, meal_id, list_id):
     Meal.objects.get(id=meal_id).lists.remove(list_id)
     return redirect('detail', meal_id=meal_id)
 
+@login_required
 def assoc_list_delete(request, meal_id, list_id):
     Meal.objects.get(id=meal_id).lists.remove(list_id)
     return redirect('detail', meal_id=meal_id)
 
+@login_required
 def add_photo(request, meal_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
@@ -128,4 +131,3 @@ class ListUpdate(LoginRequiredMixin, UpdateView):
 class ListDelete(LoginRequiredMixin, DeleteView):
     model = List
     success_url = '/lists/'
-
