@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Delete Grocery List</h1>
+
+<h4>
+    Are you sure you want to erase this Grocery List
+    <span class="teal-text">{{ objects.name }}</span>?
+</h4>
+
+<form action="" method="POST">
+    {%  csrf_token %}
+    <input type="submit" value="Yes Delete!" class="btn" />
+    <a class="btn blue"  href="{% url 'index' object.id %}">Cancel</a>
+</form>
+{% endblock %}

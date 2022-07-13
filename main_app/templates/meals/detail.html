@@ -1,100 +1,124 @@
 {% extends 'base.html' %} {% block content %}
 
-<h1>Recipe</h1>
+<h1 class="center">{{meal.name}}</h1>
 <div class="row">
-    <div class="col s3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card_title">Day: {{meal.day}}</span>
-                <p>Date: {{meal.date}}</p>
-                <p>Meal Name: {{meal.name}}</p>
-            </div>
-            <div class="card-action">
-                <a href="{% url 'meals_update' meal.id %}">Edit</a>
-                <a href="{% url 'meals_delete' meal.id %}">Delete</a>
-            </div>
+    <div class="col s12">
+        {% for photo in meal.photo_set.all %}
+            <img class="responsive-img card" src="{{photo.url}}" alt="{{meal.name}}">
+        {% empty %}
+            <div class="center card-panel teal-text center-align">No Photos UpLoaded</div>
+        {% endfor %}
+        <div class="card-action">
+            <a href="{% url 'meals_update' meal.id %}">Edit</a>
+            <a href="{% url 'meals_delete' meal.id %}">Delete</a>
         </div>
     </div>
-
-        <!-- =======================PHOTO ADD==================================== -->
-    {% for photo in meal.photo_set.all %}
-        <img class="responsive-img card-panel" src="{{photo.url}}" alt="{{meal.name}}">
-    (% empty %)
-        <div class="card-panel teal-text center-align">No Photos UpLoaded</div>
-    (% endfor %)
-    <form
-        action="{% url 'add_photo' meal.id %}"
-        enctype="multipart/form-data"
-        method="POST"
-        class="card-panel">
-        {% csrf_token %}
-        <input type="file" name="photo-file" />
-        <br /> <br />
-        <input type="submit" class="btn" value="Upload Photo" />
-    </form>
 </div>
 
 
-<!-- ==========================RECIPE ADD====================================== -->
 <div class="col s6">
-    <form action="{% url 'add_recipe' meal.id %}" method="POST">
-        {% csrf_token %} {{ recipe_form.as_p }}
-        <input type="submit" class="btn" value="Add Recipe" />
-    </form>
-        <table class="striped">
-            <thead>
-                <tr>
-                    <th>Ingredients</th>
-                    <th>Directions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for recipe in meal.recipe_set.all %}
-                <tr>
-                    <td>{{recipe.ingredients}}</td>
-                    <td>{{recipe.directions}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <hr />
-    <!-- =================================LIST ADD==================================== -->
-<div class="row">
-    <div class="col s6">
-        <h3>{{meal.name}}</h3>
-        {% if meal.lists.count %} {% for list in meal.lists.all %}
-        <div class="card">
-            <div class="card-title">
-                <span>{{ meal.name }}</span>
+    <div class="card">
+        <div class="card-content">
+            <h5>Ingredients:</h5>
+            {% for recipe in meal.recipe_set.all %}
+            <p>{{recipe.ingredients}}</p>
+            {% endfor %}
+       
+
+   
+                </form>
             </div>
         </div>
-        <div class="card-action">
-            <form
-                action="{% url 'assoc_list_delete' meal.id list.id %}"
-                method="POST">
-            {% csrf_token %}
-                <button type="submit" class="btn red">Delete</button>
-            </form>
+    </div>
+</div>
+<div class="col s6">
+    <div class="card">
+        <div class="card-content">
+            <h5>Directions:</h5>
+            {% for directions in meal.directions_set.all %}
+            <p>{{directions.directions}}</p>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %} 
-{ % else %}
-<div class="card">
-<br />
-<h5>No Lists</h5>
-        {% endif %}
-     </div>
-     <div class="col s6">
+</div>
+  <br />      
+<div class="card-panel">
+    <form action="{% url 'add_recipe' meal.id %}" method="POST">
+        {% csrf_token %} {{ recipe_form.as_p }}
+        <input type="submit" class="btn" value="Add Ingredients" />
+    </form>
+</div>
+
+<div class="card-panel">
+    <form action="{% url 'add_directions' meal.id %}" method="POST">
+        {% csrf_token %} {{ directions_form.as_p }}
+        <input type="submit" class="btn" value="Add Directions" />
+        </form>
+</div>
+    
+
+
+                <form
+                    action="{% url 'add_photo' meal.id %}"
+                    enctype="multipart/form-data"
+                    method="POST"
+                    class="card-panel"> 
+                {% csrf_token %}
+                <input type="file" name="photo-file" />
+                <br /> <br />
+                <input type="submit" class="btn" value="Upload Photo" />
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>             
+
+    <!-- =================================LIST ADD==================================== -->
+    <!-- <div class="row">
+        <div class="col s6">
+            <h3>{{meal.name}}</h3>
+            {% if meal.lists.count %} {% for list in meal.lists.all %}
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">
+                        <span>{{ meal.name }}</span>
+                    </div>
+                </div>
+            <div class="card-action">
+                <form
+                    action="{% url 'assoc_list_delete' meal.id list.id %}"
+                    method="POST">
+                {% csrf_token %}
+                        <button type="submit" class="btn red">Delete</button>
+                </form>
+            </div>
+        </div>
+            {% endfor %} {% else %} 
+            <h5>No Lists</h5>
+            {% endif %}
+        </div>
+        <div class="col s6">
         <h3> Grocery Lists </h3>
-        {% if lists.count %}
-        {% for list in lists.all %}
+        {% if lists.count %} {% for list in lists.all %}
         <div class="card">
+            <div class="card-content">
+                <div class="card-title">
+                    <span>{{ list.quantity}}</span>
+                    {{ list.item }}
+                </div>
+            </div>
+            
+            <div class="card-action">
+                <form action="{% url 'assoc_list' meal.id list.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Add</button>
+                </form>
+            </div>
         </div>
         {% endfor %}
     {% else %}
         <h5>{{meal.name}} already has a list</h5>
         {% endif %}
      </div>
-</div>
+    </div> -->
 {% endblock %}

@@ -1,5 +1,59 @@
 {% extends 'base.html' %} {% block content %}
+<div class="card-panel">
 
-<h1>list detail</h1>
+    <h1>Success:</h1>
+    <h3>Item Added to Grocery List</h3>
+</div>
+
+            
+
+    <!-- =================================LIST ADD==================================== -->
+    <!-- <div class="row">
+        <div class="col s6">
+            <h3>{{meal.name}}</h3>
+            {% if meal.lists.count %} {% for list in meal.lists.all %}
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">
+                        <span>{{ meal.name }}</span>
+                    </div>
+                </div>
+            <div class="card-action">
+                <form
+                    action="{% url 'assoc_list_delete' meal.id list.id %}"
+                    method="POST">
+                {% csrf_token %}
+                        <button type="submit" class="btn red">Delete</button>
+                </form>
+            </div>
+        </div>
+            {% endfor %} {% else %} 
+            <h5>No Lists</h5>
+            {% endif %}
+        </div>
+        <div class="col s6">
+        <h3> Grocery Lists </h3>
+        {% if lists.count %} {% for list in lists.all %}
+        <div class="card">
+            <div class="card-content">
+                <div class="card-title">
+                    <span>{{ list.quantity}}</span>
+                    {{ list.item }}
+                </div>
+            </div>
+            
+            <div class="card-action">
+                <form action="{% url 'assoc_list' meal.id list.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Add</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <h5>{{meal.name}} already has a list</h5>
+        {% endif %}
+     </div>
+    </div> -->
 
 {% endblock %}

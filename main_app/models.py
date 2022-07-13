@@ -14,11 +14,8 @@ CHOWTIME = (
 class List(models.Model):
     quantity = models.CharField(max_length=100)
     item = models.CharField(max_length=100)
-   
-
     def __str__(self):
         return f"{self.quantity} {self.item}"
-    
     def get_absolute_url(self):
         return reverse('lists_detail', kwargs={'pk': self.id})
 
@@ -28,25 +25,25 @@ class Meal(models.Model):
     name = models.CharField(max_length=150)
     lists = models.ManyToManyField(List)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.name
-    
     def get_absolute_url(self):
         return reverse('detail', kwargs={'meal_id': self.id})
 
 class Recipe(models.Model):
-    ingredients = models.TextField(max_length=500)
-    directions = models.TextField(max_length=500)
-  
-    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-    
+    ingredients = models.CharField(max_length=100)
+    meal = models.ForeignKey(Meal, on_delete=models.CASCADE) 
     def __str__(self):
-        return f"Recipe Ingredients {self.ingredients} Recipe Directions {self.directions}"
+        return f"Recipe Ingredients {self.ingredients}"
+    
+class Directions(models.Model):  
+    directions = models.TextField(max_length=1000)
+    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"Recipe Directions {self.directions}"
     
 class Photo(models.Model):
     url = models.CharField(max_length=200)
     meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
-
     def __str__(self):
         return f"Photo for meal_id: {self.meal_id} @{self.url}"
