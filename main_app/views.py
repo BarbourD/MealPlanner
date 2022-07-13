@@ -18,8 +18,8 @@ BUCKET = 'meal-planner-db'
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'home.html')
+# def home(request):
+#     return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
@@ -88,7 +88,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('index')
+            return redirect('about')
         else:
             error_message = "Invalid Entry = Please Try Again"
     form = UserCreationForm()
@@ -131,3 +131,4 @@ class ListUpdate(LoginRequiredMixin, UpdateView):
 class ListDelete(LoginRequiredMixin, DeleteView):
     model = List
     success_url = '/lists/'
+

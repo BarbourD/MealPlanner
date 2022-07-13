@@ -6,7 +6,7 @@
         {% for photo in meal.photo_set.all %}
             <img class="responsive-img card" src="{{photo.url}}" alt="{{meal.name}}">
         {% empty %}
-            <div class="center card-panel teal-text center-align">No Photos UpLoaded</div>
+            <div class="center card-panel text-teal center-align">No Photos UpLoaded</div>
         {% endfor %}
         <div class="card-action">
             <a href="{% url 'meals_update' meal.id %}">Edit</a>
